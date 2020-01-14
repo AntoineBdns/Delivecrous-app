@@ -1,0 +1,12 @@
+.card img{
+   max-height: 25vh;
+   overflow: hidden;
+}
+
+.card .title{
+    font-size: 1.5em;
+}
+
+.card .price{
+    font-size : 1em;
+}
