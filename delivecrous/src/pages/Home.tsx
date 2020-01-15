@@ -1,4 +1,4 @@
-import {IonModal,IonToast,IonItem,IonIcon,IonButton,IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonFab, IonFabButton, IonCheckbox } from '@ionic/react';
+import {IonList,IonModal,IonToast,IonItem,IonIcon,IonButton,IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonFab, IonFabButton, IonCheckbox, IonInput, IonListHeader } from '@ionic/react';
 import React, { useState } from 'react';
 import  {cart,add,close} from 'ionicons/icons';
 import "./Home.css";
@@ -33,7 +33,7 @@ const Home: React.FC = () => {
     )
   });
 
-  //Affiche la liste des shops dans le pannier
+  //Affiche la liste des items dans le pannier
   var cartCards = cartList.map((id : number) => {
     var name = null;
     var price = null;
@@ -44,13 +44,11 @@ const Home: React.FC = () => {
       }
     });
     return (
-      <IonCard className="card">
-        <IonCardHeader>
-          <IonCardTitle className="title">{name}</IonCardTitle>
-          <IonCardSubtitle className="price">{price}</IonCardSubtitle>
-        </IonCardHeader>
-      </IonCard>
-      )
+      <IonItem className="cartItem">
+        <IonLabel className="name">{name}</IonLabel>
+        <IonLabel className="price">{price}</IonLabel>
+      </IonItem>
+    )
   });
 
   //Affiche le contenu da la page
@@ -75,7 +73,35 @@ const Home: React.FC = () => {
             </IonButton>
           </IonToolbar>
           <IonContent>
-            {cartCards}
+            <IonCard>
+              <IonList>
+                <IonListHeader>Liste des produits</IonListHeader>
+                {
+                (cartList.length>0)? cartCards : 
+                  <IonItem><IonLabel className="emptyCartMessage">Votre Pannier est vide</IonLabel></IonItem>
+                }
+              </IonList>
+            </IonCard>
+            <IonCard>
+              <IonCardHeader>Livraison</IonCardHeader>
+              <IonCardContent>
+                <IonItem>
+                  <IonLabel>Rue</IonLabel>
+                  <IonInput type="text" placeholder="Rue de la Victoire"></IonInput>
+                </IonItem>
+                <IonItem>
+                  <IonLabel>Ville</IonLabel>
+                  <IonInput type="text" placeholder="Valenciennes"></IonInput>
+                </IonItem>
+                <IonItem>
+                  <IonLabel>Code Postal</IonLabel>
+                  <IonInput type="number" placeholder="59300"></IonInput>
+                </IonItem>
+                <IonButton expand="block" disabled={cartList.length<=0}>
+                    Passer Commande
+                </IonButton>
+              </IonCardContent>
+            </IonCard>
           </IonContent>      
         </IonModal>
       </IonContent>

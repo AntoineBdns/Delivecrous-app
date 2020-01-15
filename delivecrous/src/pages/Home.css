@@ -14,3 +14,13 @@
 .toastMessage{
     text-align: center;
 }
+
+.emptyCartMessage{
+    text-align: center;
+    color : gray;
+}
+
+.cartItem .price{
+    text-align:right;
+    color:gray;
+}
