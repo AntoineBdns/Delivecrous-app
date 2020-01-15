@@ -1,38 +1,31 @@
-import {IonAlert,IonList,IonModal,IonToast,IonItem,IonIcon,IonButton,IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonInput, IonListHeader } from '@ionic/react';
-import React, { useState } from 'react';
-import  { cart, close } from 'ionicons/icons';
+import {IonAlert,IonList,IonModal,IonToast,IonItem,IonIcon,IonButton,IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonInput, IonListHeader, IonImg } from '@ionic/react';
+import React, { useState, useEffect } from 'react';
+import  { cart, close, add, trash, beer, book } from 'ionicons/icons';
 import "./Home.css";
-import data from "../data.json";
-
-const shopList = data.shopList;
 
 const Home: React.FC = () => {
- 
-  // function getBeers(){
-  //   fetch("https://api.punkapi.com/v2/beers")
-  //   .then(res => res.json())
-  //   .then(
-  //     (result) => {
-  //       console.log("API CALL");
-  //       setBeerList(result);
-  //     },
-  //     (error) => {
-  //       alert(error);
-  //     }
-  //   );
-  // }
-  
   const [showModal, setShowModal] = useState(false);
   const [cartList, setCartList] = useState(new Array<number>());
   const [showToastAdd, setShowToastAdd] = useState(false);
   const [showAlertValidation, setAlertValidation] = useState(false);
   const [showToastValidation, setShowToastValidation] = useState(false);
-  //const [beerList, setBeerList] = useState(new Array());
-  
-  // if(beerList.length <= 0)
-  //   getBeers();
+  const [beerList, setBeerList] = useState(new Array<any>());
 
-  function addItemToCart(id : number){
+  useEffect(() => {
+    fetch("https://api.punkapi.com/v2/beers")
+    .then(res => res.json())
+    .then(
+      (result) => {
+        setBeerList(result)
+      },
+      (error) => {
+        alert(error);
+      }
+    )
+  }, [])
+  
+
+  function addItemToCart(id : number) {
     setCartList([...cartList, id]);
     setShowToastAdd(true);
   }
@@ -41,57 +34,45 @@ const Home: React.FC = () => {
     setAlertValidation(true);
   }
 
-  //Affiche les cards des shops sur la page principale
-  var shopCards = shopList.map((shop) => {
+  var beerCards = beerList.map((beer) => {
     return (
-      <IonCard key={shop.id} className="card" routerLink={`/plat/${shop.id}`} routerDirection="forward">
-        <img src= {shop.img} alt={shop.name} />
-        <IonCardHeader>
-          <IonCardTitle className="title">{shop.name}</IonCardTitle>
-          <IonCardSubtitle className="price">{shop.price}</IonCardSubtitle>
-        </IonCardHeader>
-        <IonCardContent className="content">
-          {shop.desc}
-          <IonButton expand="block" slot="end" onClick={ () => addItemToCart(shop.id)}>
-              Ajouter
-          </IonButton>
-        </IonCardContent>    
+      <IonCard key={beer.id} className="card">
+        <IonList>
+          <IonItem href={`/plat/${beer.id}`} routerDirection="forward" detail>
+              <IonLabel color="primary" className="title">{beer.name}</IonLabel>
+          </IonItem>
+          <IonItem href={`/plat/${beer.id}`} routerDirection="forward">
+            <IonImg src= {beer.image_url} alt={beer.name} className="img" />
+          </IonItem>
+          <IonCardContent className="content">
+            <IonLabel>{beer.description}</IonLabel>
+            
+            <IonButton expand="full" slot="end" onClick={ () => addItemToCart(beer.id)}>
+              <IonIcon icon={add} slot="start"></IonIcon>
+              <IonLabel>Ajouter</IonLabel>
+            </IonButton>
+          </IonCardContent>
+        </IonList>        
       </IonCard>
     )
   });
 
-  // var beerCarts = beerList.map((beer : any)=>{
-  //   return (<IonCard className="card">
-  //     <img src= {beer.image_url} alt={beer.name} />
-  //     <IonCardHeader>
-  //       <IonCardTitle className="title">{beer.name}</IonCardTitle>
-  //       <IonCardSubtitle className="price">{beer.id}</IonCardSubtitle>
-  //     </IonCardHeader>
-  //     <IonCardContent className="content">
-  //       {beer.description}
-  //       <IonButton expand="block" slot="end" onClick={ () => addItemToCart(beer.id)}>
-  //           Ajouter
-  //       </IonButton>
-  //     </IonCardContent>    
-  //   </IonCard>
-  //   )
-  // });
-
   //Affiche la liste des items dans le pannier
-  var cartCards = cartList.map((id : number) => {
+  var cartCards = cartList.map((id) => {
     var name = null;
     var price = null;
-    shopList.forEach((s) => {
-      if(s.id == id){
+    beerList.forEach((s) => {
+      if(s.id === id){
          name = s.name;
          price = s.price;
       }
     });
    
     return (
-      <IonItem className="cartItem">
+      <IonItem key={id} className="cartItem">
         <IonLabel className="name">{name}</IonLabel>
         <IonLabel className="price">{price}</IonLabel>
+        <IonButton fill="default"><IonIcon icon={trash} slot="icon-only" color="danger"></IonIcon></IonButton>
       </IonItem>
     )
   });
@@ -102,22 +83,22 @@ const Home: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>Delivecrous</IonTitle>
-          <IonButton slot="end" onClick={() => setShowModal(true)}>
+          <IonButton slot="end" fill="default" onClick={() => setShowModal(true)}>
               <IonIcon slot="icon-only" icon={cart}/>
           </IonButton>
         </IonToolbar>
       </IonHeader>   
-      <IonContent className="ion-padding">
-        <IonLabel><h1>La carte</h1></IonLabel>
-        {/*
-        beerCarts
-        */
-        shopCards
-        }
+      <IonContent>
+        <IonItem class="home-title">
+          <IonLabel>La carte</IonLabel>
+          <IonIcon icon={book} slot="end"></IonIcon>
+        </IonItem>
+        
+        { beerCards }
         <IonModal isOpen={showModal}>
           <IonToolbar>
-            <IonTitle>Pannier</IonTitle>
-            <IonButton slot="end" onClick={() => setShowModal(false)}>
+            <IonTitle>Panier</IonTitle>
+            <IonButton slot="end" fill="default" onClick={() => setShowModal(false)}>
                 <IonIcon slot="icon-only" icon={close}/>
             </IonButton>
           </IonToolbar>
@@ -127,7 +108,10 @@ const Home: React.FC = () => {
                 <IonListHeader>Liste des produits</IonListHeader>
                 {
                 (cartList.length>0)? cartCards : 
-                  <IonItem><IonLabel className="emptyCartMessage">Votre Pannier est vide</IonLabel></IonItem>
+                  <IonItem>
+                    <IonLabel className="emptyCartMessage">T'es sûr que tu veux rien ?</IonLabel>
+                    <IonIcon icon={beer} slot="end"></IonIcon>
+                  </IonItem>
                 }
               </IonList>
             </IonCard>
@@ -146,7 +130,7 @@ const Home: React.FC = () => {
                   <IonLabel>Code Postal</IonLabel>
                   <IonInput type="number" placeholder="59300"></IonInput>
                 </IonItem>
-                <IonButton expand="block" disabled={cartList.length<=0} onClick={() => validateForm()}>
+                <IonButton expand="block" color="success" disabled={cartList.length<=0} onClick={() => validateForm()}>
                     Passer Commande
                 </IonButton>
               </IonCardContent>
@@ -184,7 +168,7 @@ const Home: React.FC = () => {
             {
               text: 'Valider',
               handler: () => {
-                setCartList(new Array());
+                setCartList(new Array<number>());
                 setShowToastValidation(true);
               }
             }

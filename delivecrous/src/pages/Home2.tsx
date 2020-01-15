@@ -1,11 +1,10 @@
-import { IonIcon, IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonToast, IonModal } from '@ionic/react';
+import { IonIcon, IonAlert, IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonToast, IonModal, IonItem, IonListHeader, IonList, IonInput } from '@ionic/react';
 import React from 'react';
 import  { cart, close } from 'ionicons/icons';
 import "./Home.css";
-import data from "../data.json";
 
 
-export default class Welcome extends React.Component<any, any> {
+export default class Home2 extends React.Component<any, any> {
     constructor(props: any) {
       super(props)
       this.state = {
@@ -13,14 +12,39 @@ export default class Welcome extends React.Component<any, any> {
         showToastAdd: false,
         showAlertValidation: false,
         showToastValidation: false,
-        beerList: data.shopList,
+        beerList: [],
         cartList: []
       }  
+      this.getDatas();
+
+    }
+
+    getDatas() {
+        fetch("https://api.punkapi.com/v2/beers")
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log("API : ", result);
+                this.setState({beerList: result})
+            },
+            (error) => {
+                alert(error);
+            }
+        );
     }
 
     addItemToCart(id : number) {
+        console.log(id)
         let cartItems = [...this.state.cartList, id];
-        this.setState({cartList: cartItems});
+        console.log("CART ITEMS : ", cartItems)
+        console.log("CART LIST : ", this.state.cartList)
+        this.setState({cartList: cartItems}, () => {console.log("CART LIST : ", this.state.cartList)});
+        
+        this.setShowToastAdd(true)
+    }
+
+    resetCart() {
+        this.setState({cartList: []})
     }
 
     setShowToastAdd(value : boolean) {
@@ -29,6 +53,18 @@ export default class Welcome extends React.Component<any, any> {
 
     setShowModal(value : boolean) {
         this.setState({showModal: value})
+    }
+
+    setShowToastValidation(value : boolean) {
+        this.setState({showToastValidation: value})
+    }
+
+    setShowAlertValidation(value : boolean) {
+        this.setState({showAlertValidation: value})
+    }
+
+    validateForm(){
+        this.setShowAlertValidation(true);
     }
 
     renderBeerCards() {
@@ -68,14 +104,14 @@ export default class Welcome extends React.Component<any, any> {
                         this.state.beerList.map((beer: any) => {
                             return (
                                 <IonCard key={beer.id} className="card" routerLink={`/plat/${beer.id}`} routerDirection="forward">
-                                    <img src= {beer.img} alt={beer.name} />
+                                    <img src= {beer.image_url} alt={beer.name} />
                                     <IonCardHeader>
                                     <IonCardTitle className="title">{beer.name}</IonCardTitle>
-                                    <IonCardSubtitle className="price">{beer.price}</IonCardSubtitle>
+                                    <IonCardSubtitle className="price">4</IonCardSubtitle>
                                     </IonCardHeader>
                                     <IonCardContent className="content">
-                                    {beer.desc}
-                                    <IonButton expand="block" slot="end" onClick={ () => this.addItemToCart(beer.id)}>
+                                    {beer.description}
+                                    <IonButton expand="block" slot="end" onClick={ (e) => {e.preventDefault(); this.addItemToCart(beer.id)}}>
                                         Ajouter
                                     </IonButton>
                                     </IonCardContent>    
@@ -91,27 +127,52 @@ export default class Welcome extends React.Component<any, any> {
                             </IonButton>
                         </IonToolbar>
                         <IonContent>
-                            {
-                                this.state.cartList.map((id : number) => {
-                                    var name = null;
-                                    var price = null;
-                                    this.state.beerList.forEach((b : any) => {
-                                      if(b.id === id){
-                                        name = b.name;
-                                        price = b.price;
-                                      }  
-                                    });
-                                   
-                                    return (
-                                      <IonCard key="id" className="card">
-                                        <IonCardHeader>
-                                          <IonCardTitle className="title">{name}</IonCardTitle>
-                                          <IonCardSubtitle className="price">{price}</IonCardSubtitle>
-                                        </IonCardHeader>
-                                      </IonCard>
-                                    )
-                                  })
-                            }
+                            <IonCard>
+                                <IonList>
+                                    <IonListHeader>Liste des produits</IonListHeader>
+                                    {
+                                        (this.state.cartList.lenght > 0) ? (
+                                            this.state.cartList.map((id : number) => {
+                                                var name = null;
+                                                var price = null;
+                                                this.state.beerList.forEach((s : any) => {
+                                                if(s.id === id){
+                                                    name = s.name;
+                                                    price = s.price;
+                                                }
+                                                });
+                                            
+                                                return (
+                                                <IonItem className="cartItem">
+                                                    <IonLabel className="name">{name}</IonLabel>
+                                                    <IonLabel className="price">{price}</IonLabel>
+                                                </IonItem>
+                                                )
+                                            })
+                                        ) : <IonItem><IonLabel className="emptyCartMessage">Votre Panier est vide</IonLabel></IonItem>
+                                    }
+                                </IonList>
+                            </IonCard>
+                            <IonCard>
+                                <IonCardHeader>Livraison</IonCardHeader>
+                                <IonCardContent>
+                                    <IonItem>
+                                    <IonLabel>Rue</IonLabel>
+                                    <IonInput type="text" placeholder="Rue de la Victoire"></IonInput>
+                                    </IonItem>
+                                    <IonItem>
+                                    <IonLabel>Ville</IonLabel>
+                                    <IonInput type="text" placeholder="Valenciennes"></IonInput>
+                                    </IonItem>
+                                    <IonItem>
+                                    <IonLabel>Code Postal</IonLabel>
+                                    <IonInput type="number" placeholder="59300"></IonInput>
+                                    </IonItem>
+                                    <IonButton expand="block" disabled={this.state.cartList.length<=0} onClick={() => this.validateForm()}>
+                                        Passer Commande
+                                    </IonButton>
+                                </IonCardContent>
+                                </IonCard>
                         </IonContent>      
                     </IonModal>
                 </IonContent>
@@ -123,6 +184,34 @@ export default class Welcome extends React.Component<any, any> {
                     position="bottom"
                     duration={500}
                 />
+                <IonToast
+                    isOpen={this.state.showToastValidation}
+                    onDidDismiss={() => this.setShowToastValidation(false)}
+                    message="Commande envoyée"
+                    cssClass="toastMessage"
+                    position="bottom"
+                    duration={1000}
+                />
+                <IonAlert
+                    isOpen={this.state.showAlertValidation}
+                    onDidDismiss={() => this.setShowAlertValidation(false)}
+                    header={'Validation de la commande'}
+                    message={'Voulez vous vraiement valider cette commande ?'}
+                    buttons={[
+                        {
+                        text: 'Retour',
+                        role: 'cancel',
+                        cssClass: 'secondary',
+                        },
+                        {
+                        text: 'Valider',
+                        handler: () => {
+                            this.resetCart()
+                            this.setShowToastValidation(true);
+                        }
+                        }
+                    ]}
+                    />
             </IonPage> 
         )
     }
