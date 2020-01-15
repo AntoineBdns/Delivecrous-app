@@ -10,3 +10,7 @@
 .card .price{
     font-size : 1em;
 }
+
+.toastMessage{
+    text-align: center;
+}
