@@ -9,11 +9,13 @@ import {
   IonTabButton,
   IonTabs
 } from '@ionic/react';
+
 import { IonReactRouter } from '@ionic/react-router';
 import { home, contact } from 'ionicons/icons';
 import Home from './pages/Home';
-import Tab2 from './pages/Tab2';
+import Welcome from './pages/Home2';
 import Details from './pages/Details';
+import ItemPage from './pages/ItemPage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -41,8 +43,9 @@ const App: React.FC = () => (
       <IonTabs>
         <IonRouterOutlet>
           <Route path="/home" component={Home} exact={true} />
-          <Route path="/profil" component={Tab2} exact={true} />
-          <Route path="/profils/details" component={Details} />
+          <Route path="/profil" component={Welcome} exact={true} />
+          <Route path="/profil/details" component={Details} />
+          <Route path="/plat/:id" component={ItemPage} />
           <Route path="/" render={() => <Redirect to="/home" />} exact={true} />
         </IonRouterOutlet>
         <IonTabBar slot="bottom">

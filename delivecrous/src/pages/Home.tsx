@@ -1,8 +1,9 @@
 import {IonAlert,IonList,IonModal,IonToast,IonItem,IonIcon,IonButton,IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonInput, IonListHeader } from '@ionic/react';
 import React, { useState } from 'react';
-import  {cart,add,close} from 'ionicons/icons';
+import  { cart, close } from 'ionicons/icons';
 import "./Home.css";
-import data from "../data.json"
+import data from "../data.json";
+
 const shopList = data.shopList;
 
 const Home: React.FC = () => {
@@ -32,7 +33,7 @@ const Home: React.FC = () => {
   //   getBeers();
 
   function addItemToCart(id : number){
-    cartList.push(id);
+    setCartList([...cartList, id]);
     setShowToastAdd(true);
   }
 
@@ -42,19 +43,20 @@ const Home: React.FC = () => {
 
   //Affiche les cards des shops sur la page principale
   var shopCards = shopList.map((shop) => {
-    return (<IonCard className="card">
-      <img src= {shop.img} alt={shop.name} />
-      <IonCardHeader>
-        <IonCardTitle className="title">{shop.name}</IonCardTitle>
-        <IonCardSubtitle className="price">{shop.price}</IonCardSubtitle>
-      </IonCardHeader>
-      <IonCardContent className="content">
-        {shop.desc}
-        <IonButton expand="block" slot="end" onClick={ () => addItemToCart(shop.id)}>
-            Ajouter
-        </IonButton>
-      </IonCardContent>    
-    </IonCard>
+    return (
+      <IonCard key={shop.id} className="card" routerLink={`/plat/${shop.id}`} routerDirection="forward">
+        <img src= {shop.img} alt={shop.name} />
+        <IonCardHeader>
+          <IonCardTitle className="title">{shop.name}</IonCardTitle>
+          <IonCardSubtitle className="price">{shop.price}</IonCardSubtitle>
+        </IonCardHeader>
+        <IonCardContent className="content">
+          {shop.desc}
+          <IonButton expand="block" slot="end" onClick={ () => addItemToCart(shop.id)}>
+              Ajouter
+          </IonButton>
+        </IonCardContent>    
+      </IonCard>
     )
   });
 
@@ -85,6 +87,7 @@ const Home: React.FC = () => {
          price = s.price;
       }
     });
+   
     return (
       <IonItem className="cartItem">
         <IonLabel className="name">{name}</IonLabel>
