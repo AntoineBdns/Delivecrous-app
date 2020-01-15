@@ -1,4 +1,4 @@
-import {IonIcon,IonButton,IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonThumbnail, IonLabel, IonCard, IonItem, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle } from '@ionic/react';
+import {IonIcon,IonButton,IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle } from '@ionic/react';
 import React from 'react';
 import  {cart} from 'ionicons/icons';
 import "./Home.css";
@@ -8,7 +8,7 @@ const Home: React.FC = () => {
   
   var shopCards = shopList.map((shop) => {
     return (<IonCard className="card">
-      <img src= {shop.img} />
+      <img src= {shop.img} alt=""/>
       <IonCardHeader>
         <IonCardTitle className="title">{shop.name}</IonCardTitle>
         <IonCardSubtitle className="price">{shop.price}</IonCardSubtitle>
