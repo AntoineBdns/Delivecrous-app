@@ -1,7 +1,9 @@
-import {IonAlert,IonList,IonModal,IonToast,IonItem,IonIcon,IonButton,IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonInput, IonListHeader, IonImg } from '@ionic/react';
+import {IonAlert,IonList,IonModal,IonToast,IonItem,IonIcon,IonButton,IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLabel, IonCard, IonCardContent, IonCardHeader, IonInput, IonListHeader, IonImg, IonText } from '@ionic/react';
 import React, { useState, useEffect } from 'react';
 import  { cart, close, add, trash, beer, book } from 'ionicons/icons';
+
 import "./Home.css";
+import { Link } from 'react-router-dom';
 
 const Home: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -38,14 +40,20 @@ const Home: React.FC = () => {
     return (
       <IonCard key={beer.id} className="card">
         <IonList>
-          <IonItem href={`/plat/${beer.id}`} routerDirection="forward" detail>
+          <Link to={{
+              pathname: `/plat/${beer.id}`,
+              state: { beer: beer }
+            }}>
+            <IonItem detail>
               <IonLabel color="primary" className="title">{beer.name}</IonLabel>
-          </IonItem>
-          <IonItem href={`/plat/${beer.id}`} routerDirection="forward">
-            <IonImg src= {beer.image_url} alt={beer.name} className="img" />
-          </IonItem>
+            </IonItem>
+            <IonItem>
+              <IonImg src= {beer.image_url} alt={beer.name} className="img" />
+            </IonItem>
+          </Link>
+          
           <IonCardContent className="content">
-            <IonLabel>{beer.description}</IonLabel>
+            <IonText className="description" >{beer.description}</IonText>
             
             <IonButton expand="full" slot="end" onClick={ () => addItemToCart(beer.id)}>
               <IonIcon icon={add} slot="start"></IonIcon>

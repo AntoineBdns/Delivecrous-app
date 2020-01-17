@@ -1,0 +1,20 @@
+.image {
+    width: 40%;
+    margin: 0 auto;
+}
+
+.borders {
+    border: solid black 0.5px;
+}
+
+.row {
+    padding: 1vh 0;
+}
+
+.center {
+    text-align: center;
+}
+
+.title {
+    font-size: large;
+}

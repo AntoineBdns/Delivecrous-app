@@ -1,5 +1,5 @@
 .home-title {
-    font-size: 1.7em;
+    font-size: 1.4em;
     color: #7044ff;
 }
 
@@ -11,11 +11,24 @@
 }
 
 .card .title{
-    font-size: 1.4em;
+    font-size: 1.2em;
 }
 
 .card .price{
     font-size : 1em;
+}
+
+.card .description {
+    font-size : 1em;
+    display: block; /* Fallback for non-webkit */
+    display: -webkit-box;
+    height: 12vh; /* Fallback for non-webkit */
+    margin: 0 auto 2vh auto;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: justify;
 }
 
 .toastMessage{
