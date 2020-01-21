@@ -5,6 +5,10 @@ import  { cart, close, add, trash, beer, book } from 'ionicons/icons';
 import "./Home.css";
 import { Link } from 'react-router-dom';
 
+import { Plugins } from '@capacitor/core';
+
+const { Storage } = Plugins;
+
 const Home: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [cartList, setCartList] = useState(new Array<number>());
@@ -13,6 +17,7 @@ const Home: React.FC = () => {
   const [showToastValidation, setShowToastValidation] = useState(false);
   const [beerList, setBeerList] = useState(new Array<any>());
 
+  // Récupération des datas et du panier stocké localement au lancement de l'app
   useEffect(() => {
     fetch("https://api.punkapi.com/v2/beers")
     .then(res => res.json())
@@ -23,9 +28,33 @@ const Home: React.FC = () => {
       (error) => {
         alert(error);
       }
-    )
+    );
+
+    async function getObject() {
+      const ret = await Storage.get({ key: 'cart' });
+      var storedCart = JSON.parse(ret.value);
+
+      // On met à jour le panier seulement si des éléments ont été persités précédemment
+      if (storedCart.length > 0) {
+        setCartList(storedCart)
+      }
+    }
+
+    getObject()
   }, [])
-  
+
+  // MAJ de la persistence à chaque changement du panier
+  useEffect(() => {
+    persistCart(cartList)
+  }, [cartList])
+
+  async function persistCart(cart) {
+    await Storage.clear()
+    await Storage.set({
+      key: 'cart',
+      value: JSON.stringify(cart)
+    });
+  }  
 
   function addItemToCart(id : number) {
     setCartList([...cartList, id]);
@@ -38,11 +67,10 @@ const Home: React.FC = () => {
 
   function removeItemFromCart(id : number){
     setCartList(cartList.filter((it) => (it !== id)));
-    var index = cartList.indexOf(id);
-    delete cartList[index];
     setShowToastAdd(true);
   }
 
+  //Affiche la liste des bières dans l'accueil
   var beerCards = beerList.map((beer) => {
     return (
       <IonCard key={beer.id} className="card">
@@ -72,8 +100,9 @@ const Home: React.FC = () => {
     )
   });
 
-  //Affiche la liste des items dans le pannier
+  //Affiche la liste des items dans le panier
   var cartCards = cartList.map((id) => {
+    //console.log("ID", id)
     var name = null;
     var price = null;
     beerList.forEach((s) => {
