@@ -36,6 +36,12 @@ const Home: React.FC = () => {
     setAlertValidation(true);
   }
 
+  function removeItemToCart(id : number){
+    var index = cartList.indexOf(id);
+    delete cartList[index];
+    setShowToastAdd(true);
+  }
+
   var beerCards = beerList.map((beer) => {
     return (
       <IonCard key={beer.id} className="card">
@@ -80,7 +86,7 @@ const Home: React.FC = () => {
       <IonItem key={id} className="cartItem">
         <IonLabel className="name">{name}</IonLabel>
         <IonLabel className="price">{price}</IonLabel>
-        <IonButton fill="default"><IonIcon icon={trash} slot="icon-only" color="danger"></IonIcon></IonButton>
+        <IonButton fill="default" onClick={ () => removeItemToCart(id)}><IonIcon icon={trash} slot="icon-only" color="danger"></IonIcon></IonButton>
       </IonItem>
     )
   });
