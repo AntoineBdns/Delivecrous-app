@@ -14,7 +14,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import { home, contact } from 'ionicons/icons';
 import Home from './pages/Home';
 import ItemPage from './pages/ItemPage';
-import Profile from './pages/Profile';
+// import Profile from './pages/Profile';
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -40,13 +40,14 @@ import './theme/variables.css';
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route path="/home" component={Home} exact={true} />
-          <Route path="/profile" component={Profile} exact={true} />
-          <Route path="/plat/:id" component={ItemPage} />
-          <Route path="/" render={() => <Redirect to="/home" />} exact={true} />
-        </IonRouterOutlet>
+      <IonRouterOutlet>
+        <Route path="/home" component={Home} exact={true} />
+        {/* <Route path="/profile" component={Profile} exact={true} /> */}
+        <Route path="/plat/:id" component={ItemPage} />
+        <Route path="/" render={() => <Redirect to="/home" />} exact={true} />
+      </IonRouterOutlet>
+      {/* <IonTabs>
+       
         <IonTabBar slot="bottom">
           <IonTabButton tab="home" href="/home">
             <IonIcon icon={home} />
@@ -56,8 +57,8 @@ const App: React.FC = () => (
             <IonIcon icon={contact} />
             <IonLabel>Profile</IonLabel>
           </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
+        </IonTabBar> 
+      </IonTabs>*/}
     </IonReactRouter>
   </IonApp>
 );
