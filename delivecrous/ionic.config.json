@@ -1,5 +1,7 @@
 {
   "name": "Delivecrous",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "react"
 }
