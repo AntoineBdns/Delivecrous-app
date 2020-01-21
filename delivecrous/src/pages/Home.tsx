@@ -36,7 +36,8 @@ const Home: React.FC = () => {
     setAlertValidation(true);
   }
 
-  function removeItemToCart(id : number){
+  function removeItemFromCart(id : number){
+    setCartList(cartList.filter((it) => (it !== id)));
     var index = cartList.indexOf(id);
     delete cartList[index];
     setShowToastAdd(true);
@@ -86,7 +87,7 @@ const Home: React.FC = () => {
       <IonItem key={id} className="cartItem">
         <IonLabel className="name">{name}</IonLabel>
         <IonLabel className="price">{price}</IonLabel>
-        <IonButton fill="default" onClick={ () => removeItemToCart(id)}><IonIcon icon={trash} slot="icon-only" color="danger"></IonIcon></IonButton>
+        <IonButton fill="default" onClick={ () => removeItemFromCart(id)}><IonIcon icon={trash} slot="icon-only" color="danger"></IonIcon></IonButton>
       </IonItem>
     )
   });
