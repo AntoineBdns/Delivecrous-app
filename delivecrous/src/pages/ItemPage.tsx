@@ -9,12 +9,12 @@ interface ItemPageProps extends RouteComponentProps<{
     beer: any
 }> {}
 
-const ItemPage: React.FC<ItemPageProps> = ({match, location}) => {
+const ItemPage: React.FC<ItemPageProps> = ({location}) => {
   let retrievedData = location.state;
 
-  var beerAttributes = Object.keys(retrievedData).map(key => {
+  var beerAttributes = Object.keys(retrievedData).map((key, index) => {
     return (
-      <IonGrid>
+      <IonGrid key={index}>
         <IonRow className="row"><IonImg src={retrievedData[key].image_url} alt="IMAGE" className="image"></IonImg></IonRow>
         <IonRow className="row"><IonText className="title" color="tertiary">{retrievedData[key].name + " (" + retrievedData[key].first_brewed + ")"}</IonText></IonRow>
         <IonRow className="row">{retrievedData[key].description}</IonRow>
