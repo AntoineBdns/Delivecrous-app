@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonContent, IonHeader, IonLabel, IonPage, IonTitle, IonToolbar, IonButtons, IonBackButton, IonGrid, IonRow, IonImg, IonText, IonCol } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonBackButton, IonGrid, IonRow, IonImg, IonText, IonCol } from '@ionic/react';
 import { RouteComponentProps } from 'react-router';
 import './ItemPage.css';
 
@@ -11,13 +11,12 @@ interface ItemPageProps extends RouteComponentProps<{
 
 const ItemPage: React.FC<ItemPageProps> = ({match, location}) => {
   let retrievedData = location.state;
-  console.log("DATA", retrievedData)
 
   var beerAttributes = Object.keys(retrievedData).map(key => {
     return (
       <IonGrid>
         <IonRow className="row"><IonImg src={retrievedData[key].image_url} alt="IMAGE" className="image"></IonImg></IonRow>
-        <IonRow className="row"><IonText color="tertiary" className="title">{retrievedData[key].name + " (" + retrievedData[key].first_brewed + ")"}</IonText></IonRow>
+        <IonRow className="row"><IonText className="title" color="tertiary">{retrievedData[key].name + " (" + retrievedData[key].first_brewed + ")"}</IonText></IonRow>
         <IonRow className="row">{retrievedData[key].description}</IonRow>
         <IonRow className="row center">
           <IonCol className="borders"><IonText color="secondary">Degré</IonText></IonCol>
@@ -46,7 +45,7 @@ const ItemPage: React.FC<ItemPageProps> = ({match, location}) => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar color="primary">
             <IonButtons slot="start">
                 <IonBackButton defaultHref="/home" />
             </IonButtons>
@@ -54,9 +53,6 @@ const ItemPage: React.FC<ItemPageProps> = ({match, location}) => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonLabel>
-            <h2>ID : {match.params.id}</h2>
-        </IonLabel>
         { 
           beerAttributes
         }

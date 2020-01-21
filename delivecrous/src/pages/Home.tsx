@@ -52,7 +52,7 @@ const Home: React.FC = () => {
               state: { beer: beer }
             }}>
             <IonItem detail>
-              <IonLabel color="primary" className="title">{beer.name}</IonLabel>
+              <IonLabel color="secondary" className="title">{beer.name}</IonLabel>
             </IonItem>
             <IonItem>
               <IonImg src= {beer.image_url} alt={beer.name} className="img" />
@@ -62,7 +62,7 @@ const Home: React.FC = () => {
           <IonCardContent className="content">
             <IonText className="description" >{beer.description}</IonText>
             
-            <IonButton expand="full" slot="end" onClick={ () => addItemToCart(beer.id)}>
+            <IonButton expand="full" slot="end" color="secondary" onClick={ () => addItemToCart(beer.id)}>
               <IonIcon icon={add} slot="start"></IonIcon>
               <IonLabel>Ajouter</IonLabel>
             </IonButton>
@@ -96,27 +96,29 @@ const Home: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar color="primary">
           <IonTitle>Delivecrous</IonTitle>
-          <IonButton slot="end" fill="default" onClick={() => setShowModal(true)}>
-              <IonIcon slot="icon-only" icon={cart}/>
+          <IonButton slot="end" fill="clear" onClick={() => setShowModal(true)}>
+              <IonIcon slot="icon-only" color="light" icon={cart}/>
           </IonButton>
         </IonToolbar>
       </IonHeader>   
       <IonContent>
-        <IonItem class="home-title">
+        <IonItem class="home-title" color="secondary">
           <IonLabel>La carte</IonLabel>
           <IonIcon icon={book} slot="end"></IonIcon>
         </IonItem>
         
         { beerCards }
         <IonModal isOpen={showModal}>
-          <IonToolbar>
-            <IonTitle>Panier</IonTitle>
-            <IonButton slot="end" fill="default" onClick={() => setShowModal(false)}>
-                <IonIcon slot="icon-only" icon={close}/>
-            </IonButton>
-          </IonToolbar>
+          <IonHeader>
+            <IonToolbar color="primary">
+              <IonTitle>Panier</IonTitle>
+              <IonButton slot="end" fill="clear" onClick={() => setShowModal(false)}>
+                  <IonIcon slot="icon-only" color="light" icon={close}/>
+              </IonButton>
+            </IonToolbar>
+          </IonHeader>
           <IonContent>
             <IonCard>
               <IonList>
@@ -125,7 +127,7 @@ const Home: React.FC = () => {
                 (cartList.length>0)? cartCards : 
                   <IonItem>
                     <IonLabel className="emptyCartMessage">T'es sûr que tu veux rien ?</IonLabel>
-                    <IonIcon icon={beer} slot="end"></IonIcon>
+                    <IonIcon icon={beer} slot="end" color="secondary"></IonIcon>
                   </IonItem>
                 }
               </IonList>
@@ -134,15 +136,15 @@ const Home: React.FC = () => {
               <IonCardHeader>Livraison</IonCardHeader>
               <IonCardContent>
                 <IonItem>
-                  <IonLabel>Rue</IonLabel>
-                  <IonInput type="text" placeholder="Rue de la Victoire"></IonInput>
+                  <IonLabel>Rue : </IonLabel>
+                  <IonInput type="text" placeholder="4 rue de la Victoire"></IonInput>
                 </IonItem>
                 <IonItem>
-                  <IonLabel>Ville</IonLabel>
+                  <IonLabel>Ville : </IonLabel>
                   <IonInput type="text" placeholder="Valenciennes"></IonInput>
                 </IonItem>
                 <IonItem>
-                  <IonLabel>Code Postal</IonLabel>
+                  <IonLabel>Code Postal : </IonLabel>
                   <IonInput type="number" placeholder="59300"></IonInput>
                 </IonItem>
                 <IonButton expand="block" color="success" disabled={cartList.length<=0} onClick={() => validateForm()}>
