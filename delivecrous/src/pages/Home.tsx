@@ -76,7 +76,7 @@ const Home: React.FC = () => {
       <IonCard key={beer.id} className="card">
         <IonList>
           <Link to={{
-              pathname: `/plat/${beer.id}`,
+              pathname: `/beer/${beer.id}`,
               state: { beer: beer }
             }}>
             <IonItem detail>
